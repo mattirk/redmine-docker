@@ -18,5 +18,5 @@ production:
   host: <%= ENV['DATABASE_HOST'] || '127.0.0.1' %>
   port: <%= ENV['DATABASE_PORT'] || 3306 %>
   username: <%= ENV['DATABASE_USER'] || 'none' %>
-  password: <%= ENV['DATABASE_PASS'] || 'none' %>
+  password: <%= ENV['DATABASE_PASSWORD'] || 'none' %>
   encoding: <%= ENV['DATABASE_ENCODING'] || 'utf8' %>
