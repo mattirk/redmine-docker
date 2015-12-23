@@ -12,6 +12,7 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
+set -e
 
 function truncate () {
   APP_LOG="${RUBY_HOME}/app/log/production.log"
@@ -31,9 +32,9 @@ function start () {
     bundle exec passenger start
 }
 
-source "${RUBY_HOME}/.rvm/scripts/rvm" \
-  && pushd "${RUBY_HOME}/app" \
-    && export RAILS_ENV=production \
-    && bundle exec rake db:migrate \
-    && bundle exec rake redmine:plugins:migrate \
-    && start
+source "${RUBY_HOME}/.rvm/scripts/rvm"
+cd "${RUBY_HOME}/app"
+  export RAILS_ENV=production
+  bundle exec rake db:migrate
+  bundle exec rake redmine:plugins:migrate
+  start

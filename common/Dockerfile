@@ -14,7 +14,10 @@
 FROM jubicoy/passenger:ruby-2.1
 MAINTAINER Vilppu Vuorinen "vilppu.vuorinen@jubic.fi"
 
-RUN mkdir -p ${RUBY_HOME}/scripts
+RUN mkdir -p ${RUBY_HOME}/scripts \
+  && mkdir -p ${RUBY_HOME}/files
+
+VOLUME ${RUBY_HOME}/files
 
 ADD scripts/* ${RUBY_HOME}/scripts/
 ADD Passengerfile.json ${RUBY_HOME}/
