@@ -12,6 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 FROM jubicoy/passenger:ruby-2.1
+MAINTAINER Vilppu Vuorinen "vilppu.vuorinen@jubic.fi"
 
 RUN mkdir -p ${RUBY_HOME}/scripts
 
@@ -19,4 +20,4 @@ ADD scripts/* ${RUBY_HOME}/scripts/
 ADD Passengerfile.json ${RUBY_HOME}/
 ADD config/* ${RUBY_HOME}/confs/
 
-CMD ${RUBY_HOME}/scripts/run.sh
+CMD bin/bash "${RUBY_HOME}/scripts/run.sh"

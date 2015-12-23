@@ -12,6 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 FROM jubicoy/redmine-base
+MAINTAINER Vilppu Vuorinen "vilppu.vuorinen@jubic.fi"
 
 ENV REDMINE_VERSION 3.2.0
 ENV REDMINE_PKG redmine-${REDMINE_VERSION}

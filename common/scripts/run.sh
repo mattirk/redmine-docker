@@ -12,10 +12,28 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
+
+function truncate () {
+  APP_LOG="${RUBY_HOME}/app/log/production.log"
+  SIZE_LIMIT=10485760
+  while true; do
+    CURR_SIZE=$(stat -c %s "${APP_LOG}")
+    if [ $CURR_SIZE -ge $SIZE_LIMIT ]; then
+      > "${APP_LOG}"
+    else
+      sleep 3600
+    fi
+  done
+}
+
+function start () {
+  truncate & \
+    bundle exec passenger start
+}
+
 source "${RUBY_HOME}/.rvm/scripts/rvm" \
   && pushd "${RUBY_HOME}/app" \
     && export RAILS_ENV=production \
     && bundle exec rake db:migrate \
     && bundle exec rake redmine:plugins:migrate \
-    && bundle exec passenger start \
-  && popd
+    && start

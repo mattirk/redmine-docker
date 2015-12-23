@@ -13,10 +13,9 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 source "${RUBY_HOME}/.rvm/scripts/rvm" \
-  && cp "${RUBY_HOME}/confs/additional_environment.rb" "${RUBY_HOME}/app/config/" \
   && cp "${RUBY_HOME}/Passengerfile.json" "${RUBY_HOME}/app/" \
-  && ln -sf /proc/self/fd/1 "${RUBY_HOME}/app/log/productionz.log" \
-  && ln -sf /proc/self/fd/1 "${RUBY_HOME}/app/log/passengerz.log" \
+  && cp "${RUBY_HOME}/confs/additional_environment.rb" "${RUBY_HOME}/app/config/" \
+  && ln -sf /proc/self/fd/1 "${RUBY_HOME}/app/log/passenger.log" \
   && pushd "${RUBY_HOME}/app" \
     && export RAILS_ENV=production \
     && bundle install --without development test rmagick \
