@@ -27,3 +27,7 @@ RUN cd ${RUBY_HOME} \
 RUN cp ${RUBY_HOME}/confs/database.yml.mysql ${RUBY_HOME}/app/config/database.yml \
   && ${RUBY_HOME}/scripts/bundle.sh
 
+USER root
+RUN /usr/libexec/fix-permissions ruby "${RUBY_HOME}"
+USER 1001
+
