@@ -18,6 +18,7 @@ source "${RUBY_HOME}/.rvm/scripts/rvm"
 # Configure
 cp "${RUBY_HOME}/Passengerfile.json" "${RUBY_HOME}/app/"
 cp "${RUBY_HOME}/confs/additional_environment.rb" "${RUBY_HOME}/app/config/"
+cp "${RUBY_HOME}/confs/configuration.yml" "${RUBY_HOME}/app/config/"
 ln -sf /proc/self/fd/1 "${RUBY_HOME}/app/log/passenger.log"
 ln -sf "${RUBY_HOME}/files" "${RUBY_HOME}/app/files"
 
