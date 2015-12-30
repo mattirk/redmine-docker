@@ -31,5 +31,5 @@ USER root
 RUN /usr/libexec/fix-permissions ruby "${RUBY_HOME}"
 USER 1001
 
-VOLUME ${RUBY_HOME}/app/files
+VOLUME ${RUBY_HOME}/volume
 
