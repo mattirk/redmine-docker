@@ -32,6 +32,7 @@ function start () {
     bundle exec passenger start
 }
 
+source "${RUBY_HOME}/scripts/bundle.sh"
 source "${RUBY_HOME}/.rvm/scripts/rvm"
 cd "${RUBY_HOME}/app"
   export RAILS_ENV=production

@@ -17,15 +17,14 @@ MAINTAINER Vilppu Vuorinen "vilppu.vuorinen@jubic.fi"
 RUN mkdir -p ${RUBY_HOME}/scripts \
   && mkdir -p ${RUBY_HOME}/files
 
-VOLUME ${RUBY_HOME}/files
-
 ADD scripts/* ${RUBY_HOME}/scripts/
 ADD Passengerfile.json ${RUBY_HOME}/
 ADD config/* ${RUBY_HOME}/confs/
 
 ADD root /
 USER root
-RUN /usr/libexec/fix-permissions ruby "${RUBY_HOME}"
+RUN mkdir -p ${RUBY_HOME}/volume/redmine \
+ && /usr/libexec/fix-permissions ruby "${RUBY_HOME}"
 
 USER 1001
 CMD bin/bash "${RUBY_HOME}/scripts/run.sh"

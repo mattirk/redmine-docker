@@ -15,17 +15,50 @@
 set -e
 source "${RUBY_HOME}/.rvm/scripts/rvm"
 
-# Configure
-cp "${RUBY_HOME}/Passengerfile.json" "${RUBY_HOME}/app/"
-cp "${RUBY_HOME}/confs/additional_environment.rb" "${RUBY_HOME}/app/config/"
-cp "${RUBY_HOME}/confs/configuration.yml" "${RUBY_HOME}/app/config/"
-ln -sf /proc/self/fd/1 "${RUBY_HOME}/app/log/passenger.log"
-rm -rf "${RUBY_HOME}/app/files"
-ln -sf "${RUBY_HOME}/volume/files" "${RUBY_HOME}/app/"
+init_links () {
+  mkdir -p "${RUBY_HOME}/volume/redmine/files"
 
-# Install bundle
-pushd "${RUBY_HOME}/app"
-  export RAILS_ENV=production
-  bundle install --without development test rmagick
-  bundle exec rake generate_secret_token
-popd
+  ln -sf /proc/self/fd/1 "${RUBY_HOME}/app/log/passenger.log"
+
+  rm -rf "${RUBY_HOME}/app/files"
+  ln -sf "${RUBY_HOME}/volume/redmine/files" "${RUBY_HOME}/app/"
+
+  # configuration.yml
+  REDMINE_CONFIGURATION="${RUBY_HOME}/volume/redmine/configuration.yml"
+  REDMINE_CONFIGURATION_TEMPLATE="${RUBY_HOME}/app/config/configuration.yml.example"
+  REDMINE_CONFIGURATION_TARGET="${RUBY_HOME}/app/config/configuration.yml"
+  if [ ! -f "$REDMINE_CONFIGURATION" ]; then
+    cp -f "${RUBY_HOME}/app/config/configuration.yml.example" "${REDMINE_CONFIGURATION}"
+  fi
+  ln -sf "${REDMINE_CONFIGURATION}" "${REDMINE_CONFIGURATION_TARGET}"
+
+  # settings.yml
+  REDMINE_SETTINGS="${RUBY_HOME}/volume/redmine/settings.yml"
+  REDMINE_SETTINGS_TEMPLATE="${RUBY_HOME}/app/config/settings.yml.template"
+  REDMINE_SETTINGS_TARGET="${RUBY_HOME}/app/config/settings.yml"
+  if [ ! -f "$REDMINE_SETTINGS_TEMPLATE" ]; then
+    cp "${REDMINE_SETTINGS_TARGET}" "${REDMINE_SETTINGS_TEMPLATE}"
+  fi
+  if [ ! -f "${REDMINE_SETTINGS}" ]; then
+    cp -f "${REDMINE_SETTINGS_TEMPLATE}" "${REDMINE_SETTINGS}"
+  fi
+  rm "${REDMINE_SETTINGS_TARGET}"
+  ln -sf "${REDMINE_SETTINGS}" "${REDMINE_SETTINGS_TARGET}"
+}
+
+init_conf () {
+  cp "${RUBY_HOME}/Passengerfile.json" "${RUBY_HOME}/app/"
+  cp "${RUBY_HOME}/confs/additional_environment.rb" "${RUBY_HOME}/app/config/"
+}
+
+init_bundle () {
+  pushd "${RUBY_HOME}/app"
+    export RAILS_ENV=production
+    bundle install --without development test rmagick
+    bundle exec rake generate_secret_token
+  popd
+}
+
+init_conf
+init_links
+init_bundle
