@@ -59,6 +59,13 @@ init_bundle () {
   popd
 }
 
+function copy_custom_themes () {
+  if [ -d "${RUBY_HOME}/volume/custom_themes" ]; then
+    cp -rf ${RUBY_HOME}/volume/custom_themes/* ${RUBY_HOME}/app/public/themes/
+  fi
+}
+
 init_conf
 init_links
 init_bundle
+copy_custom_themes
