@@ -54,7 +54,7 @@ init_conf () {
 init_bundle () {
   pushd "${RUBY_HOME}/app"
     export RAILS_ENV=production
-    bundle install --without development test rmagick
+    bundle install --without development test
     bundle exec rake generate_secret_token
   popd
 }
@@ -65,7 +65,14 @@ function copy_custom_themes () {
   fi
 }
 
+function copy_custom_plugins () {
+  if [ -d "${RUBY_HOME}/volume/custom_plugins" ]; then
+    cp -rf ${RUBY_HOME}/volume/custom_plugins/* ${RUBY_HOME}/app/plugins/
+  fi
+}
+
 init_conf
 init_links
 init_bundle
 copy_custom_themes
+copy_custom_plugins

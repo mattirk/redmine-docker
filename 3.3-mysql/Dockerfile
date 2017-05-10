@@ -11,26 +11,25 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-FROM jubicoy/passenger:ruby-2.1
+FROM jubicoy/redmine-base
 MAINTAINER Vilppu Vuorinen "vilppu.vuorinen@jubic.fi"
 
+ENV REDMINE_VERSION 3.3.2
+ENV REDMINE_PKG redmine-${REDMINE_VERSION}
+
+# Install
+RUN cd ${RUBY_HOME} \
+  && curl -SLO "http://www.redmine.org/releases/${REDMINE_PKG}.tar.gz" \
+  && tar -xzf "${REDMINE_PKG}.tar.gz" \
+  && mv "${REDMINE_PKG}" app \
+  && rm "${REDMINE_PKG}.tar.gz"
+
+RUN cp ${RUBY_HOME}/confs/database.yml.mysql ${RUBY_HOME}/app/config/database.yml \
+  && ${RUBY_HOME}/scripts/bundle.sh
+
 USER root
-
-RUN apt-get update && apt-get install -y \
-	libmagickwand-dev \
-	imagemagick \
-	&& rm -rf /var/lib/apt/lists/*
-
-RUN mkdir -p ${RUBY_HOME}/scripts \
-  && mkdir -p ${RUBY_HOME}/files
-
-ADD scripts/* ${RUBY_HOME}/scripts/
-ADD Passengerfile.json ${RUBY_HOME}/
-ADD config/* ${RUBY_HOME}/confs/
-
-ADD root /
-RUN mkdir -p ${RUBY_HOME}/volume/redmine \
- && /usr/libexec/fix-permissions ruby "${RUBY_HOME}"
-
+RUN /usr/libexec/fix-permissions ruby "${RUBY_HOME}"
 USER 1001
-CMD bin/bash "${RUBY_HOME}/scripts/run.sh"
+
+VOLUME ${RUBY_HOME}/volume
+
